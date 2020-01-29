@@ -22,10 +22,12 @@ class Stacks
 
   # Moves a block from its current position onto the top of stack with index
   # new_position
+  # Will not move a block if there are other blocks on top of it
   # Returns true if block moved or false if it cound not move the block
   def move(block, new_position)
     current_position = find(block)
     if (current_position &&
+        on_top(block).empty? &&
         new_position >= 0 &&
         new_position <= size()) then
       @stack[current_position].delete(block)
@@ -46,6 +48,19 @@ class Stacks
       stack[(stack.index(block) + 1)..]
     else
       nil
+    end
+  end
+
+  # Returns true if we can move a block back to its original stack
+  # returns false if there are other blocks on top of it
+  # returns false if block is not found
+  def return_block(block)
+    position = find(block)
+    if (position && on_top(block).empty?) then
+      @stack[position] = @stack[position].pop
+      true
+    else
+      false
     end
   end
 end
@@ -99,11 +114,22 @@ describe "Stacks" do
       _(my_stack.on_top(-1)).must_be_nil
     end
 
-    # it "should be possible to extract a block from underneath another block" do
-    #   my_stack = Stacks.new(2)
-    #   my_stack.move(1, 0)
-    #   _(my_stack.find(0)).must_equal 0
-    #   _(my_stack.find(1)).must_equal 0
-    # end
+    it "should not be possible to move a block from underneath another block" do
+      my_stack = Stacks.new(2)
+      my_stack.move(1, 0)
+      _(my_stack.move(0, 1)).must_equal false
+    end
+
+    it "should be possible to return a block to its original position" do
+      my_stack = Stacks.new(2)
+      my_stack.move(1, 0)
+      _(my_stack.return_block(1)).must_equal true
+    end
+
+    it "should not be possible to return a block if there is another on top" do
+      my_stack = Stacks.new(2)
+      my_stack.move(1, 0)
+      _(my_stack.return_block(0)).must_equal false
+    end
   end
 end
