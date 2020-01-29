@@ -1,3 +1,5 @@
+require "pry"
+
 class Stacks
   attr_accessor :stack
 
@@ -55,7 +57,7 @@ class Stacks
   def return_block(block)
     position = find(block)
     if (position && on_top(block).empty?) then
-      @stack[position] = @stack[position].pop
+      @stack[block].push(@stack[position].pop)
       true
     else
       false
@@ -79,6 +81,9 @@ class Robot
     if (a == b || position_a.nil? || position_b.nil?) then
       false
     else
+      # return all blocks on top
+      @world.on_top(a).reverse.map { |x| @world.return_block(x) }
+      # Now move block a
       @world.move(a, position_b)
     end
   end

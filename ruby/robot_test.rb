@@ -60,6 +60,8 @@ describe "Stacks" do
       my_stack = Stacks.new(2)
       my_stack.move(1, 0)
       _(my_stack.return_block(1)).must_equal true
+      _(my_stack.find(1)).must_equal 1
+      _(my_stack.stack).must_equal [[0], [1]]
     end
 
     it "should not be possible to return a block if there is another on top" do
@@ -84,6 +86,16 @@ describe "Stacks" do
         _(world.find(2)).must_equal 0
         _(world.find(1)).must_equal 1
         _(world.find(0)).must_equal 0
+      end
+
+      it "should return block 2 when 0 is moved from underneath it" do
+        world = Stacks.new(3)
+        robot = Robot.new(world)
+        _(robot.move_over(2, 0)).must_equal true
+        _(robot.move_over(0, 1)).must_equal true
+        _(world.find(0)).must_equal 1
+        _(world.find(1)).must_equal 1
+        _(world.find(2)).must_equal 2
       end
     end
   end
