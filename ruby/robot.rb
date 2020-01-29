@@ -62,3 +62,24 @@ class Stacks
     end
   end
 end
+
+class Robot
+  def initialize(world)
+    @world = world
+  end
+
+  # Where a and b are block numbers, puts block a onto the top of the stack
+  # containing block b, after returning any blocks that are stacked on top of
+  # block a to their initial positions.
+  # Returns true if successful, false otherwise
+  # a and b must be different, and present within the block world
+  def move_over(a, b)
+    position_a = @world.find(a)
+    position_b = @world.find(b)
+    if (a == b || position_a.nil? || position_b.nil?) then
+      false
+    else
+      @world.move(a, position_b)
+    end
+  end
+end

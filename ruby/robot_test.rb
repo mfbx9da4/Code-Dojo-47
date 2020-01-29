@@ -68,4 +68,23 @@ describe "Stacks" do
       _(my_stack.return_block(0)).must_equal false
     end
   end
+
+  describe "A robot arm" do
+    describe "when given a new block world of 3 blocks" do
+      it "should not be able to move 0 over 0" do
+        world = Stacks.new(3)
+        robot = Robot.new(world)
+        _(robot.move_over(0, 0)).must_equal false
+      end
+
+      it "should be able to move block 2 over block 0" do
+        world = Stacks.new(3)
+        robot = Robot.new(world)
+        _(robot.move_over(2, 0)).must_equal true
+        _(world.find(2)).must_equal 0
+        _(world.find(1)).must_equal 1
+        _(world.find(0)).must_equal 0
+      end
+    end
+  end
 end
