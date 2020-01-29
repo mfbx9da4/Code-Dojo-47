@@ -1,4 +1,4 @@
 .PHONY: test
 
 test:
-	ruby -Ilib:test robot.rb
+	ruby -Ilib:test robot_test.rb
