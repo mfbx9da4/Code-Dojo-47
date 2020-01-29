@@ -36,7 +36,18 @@ class Stacks
     end
   end
 
-  # def on_top
+  # Returns an array of any blocks that are on top of a specified block
+  # returns nil if block is not found
+  # returns an empty array if there are no blocks on top of the given block
+  def on_top(block)
+    position = find(block)
+    if position then
+      stack = @stack[position]
+      stack[(stack.index(block) + 1)..]
+    else
+      nil
+    end
+  end
 end
 
 describe "Stacks" do
@@ -71,11 +82,22 @@ describe "Stacks" do
       _(success).must_equal false
     end
 
-    # it "when two blocks are stacked we can find out what is on top of a block" do
-    #   my_stack = Stacks.new(2)
-    #   my_stack.move(1, 0)
-    #   _(my_stack.on_top(0)).must_equal [1]
-    # end
+    it "when two blocks are stacked we can find out what is on top of a block" do
+      my_stack = Stacks.new(2)
+      my_stack.move(1, 0)
+      _(my_stack.on_top(0)).must_equal [1]
+    end
+
+    it "when two blocks are stacked there is nothing on top of the top block" do
+      my_stack = Stacks.new(2)
+      my_stack.move(1, 0)
+      _(my_stack.on_top(1)).must_be_empty
+    end
+
+    it "when two blocks are stacked on_top returns nil for a non-existent block" do
+      my_stack = Stacks.new(2)
+      _(my_stack.on_top(-1)).must_be_nil
+    end
 
     # it "should be possible to extract a block from underneath another block" do
     #   my_stack = Stacks.new(2)
